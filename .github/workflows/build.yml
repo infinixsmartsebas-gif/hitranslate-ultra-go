@@ -10,9 +10,33 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
       - name: Crear
-        run: mkdir -p app/src/main/java/com/hitranslate/ultra && mkdir -p app/src/main/res/values && echo "include ':app'" > settings.gradle && echo "buildscript { repositories { google(); mavenCentral() } dependencies { classpath 'com.android.tools.build:gradle:8.1.4'; classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.10' } } allprojects { repositories { google(); mavenCentral() } }" > build.gradle && printf "plugins { id 'com.android.application'; id 'org.jetbrains.kotlin.android' }\nandroid { namespace 'com.hitranslate.ultra'; compileSdk 34; defaultConfig { applicationId \"com.hitranslate.ultra\"; minSdk 24; targetSdk 34; versionCode 20; versionName \"20.0\" } }\ndependencies { implementation 'androidx.core:core-ktx:1.12.0'; implementation 'androidx.appcompat:appcompat:1.6.1' }\n" > app/build.gradle && echo "<resources><string name=\"app_name\">HiTranslate</string></resources>" > app/src/main/res/values/strings.xml && echo "<resources><style name=\"Theme.HiTranslate\" parent=\"Theme.Material3.DayNight\"/></resources>" > app/src/main/res/values/themes.xml && echo "<?xml version=\"1.0\" encoding=\"utf-8\"?><manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"><uses-permission android:name=\"android.permission.RECORD_AUDIO\"/><application><activity android:name=\".MainActivity\" android:exported=\"true\"><intent-filter><action android:name=\"android.intent.action.MAIN\"/><category android:name=\"android.intent.category.LAUNCHER\"/></intent-filter></activity></application></manifest>" > app/src/main/AndroidManifest.xml && echo "package com.hitranslate.ultra; import android.os.Bundle; import androidx.appcompat.app.AppCompatActivity; import android.widget.TextView; class MainActivity : AppCompatActivity() { override fun onCreate(b: Bundle?) { super.onCreate(b); val t = TextView(this); t.text = \"TR-ES-EN OK\"; setContentView(t); } }" > app/src/main/java/com/hitranslate/ultra/MainActivity.kt && echo "android.useAndroidX=true" > gradle.properties && gradle wrapper --gradle-version 8.5
+        run: |
+          mkdir -p app/src/main/java/com/hitranslate/ultra
+          mkdir -p app/src/main/res/values
+          echo "include ':app'" > settings.gradle
+          echo "android.useAndroidX=true" > gradle.properties
+          echo "buildscript { repositories { google(); mavenCentral() } dependencies { classpath 'com.android.tools.build:gradle:8.1.4'; classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.10' } } allprojects { repositories { google(); mavenCentral() } }" > build.gradle
+          printf "plugins { id 'com.android.application'; id 'org.jetbrains.kotlin.android' }\nandroid { namespace 'com.hitranslate.ultra'; compileSdk 34; defaultConfig { applicationId 'com.hitranslate.ultra'; minSdk 24; targetSdk 34; versionCode 21; versionName '21.0' } }\ndependencies { implementation 'androidx.core:core-ktx:1.12.0'; implementation 'androidx.appcompat:appcompat:1.6.1' }\n" > app/build.gradle
+          echo "<resources><string name='app_name'>HiTranslate</string></resources>" > app/src/main/res/values/strings.xml
+          echo "<resources><style name='Theme.HiTranslate' parent='Theme.Material3.DayNight'/></resources>" > app/src/main/res/values/themes.xml
+          echo "<?xml version='1.0' encoding='utf-8'?><manifest xmlns:android='http://schemas.android.com/apk/res/android'><uses-permission android:name='android.permission.RECORD_AUDIO'/><application><activity android:name='.MainActivity' android:exported='true'><intent-filter><action android:name='android.intent.action.MAIN'/><category android:name='android.intent.category.LAUNCHER'/></intent-filter></activity></application></manifest>" > app/src/main/AndroidManifest.xml
+          echo "package com.hitranslate.ultra" > app/src/main/java/com/hitranslate/ultra/MainActivity.kt
+          echo "import android.os.Bundle" >> app/src/main/java/com/hitranslate/ultra/MainActivity.kt
+          echo "import androidx.appcompat.app.AppCompatActivity" >> app/src/main/java/com/hitranslate/ultra/MainActivity.kt
+          echo "import android.widget.TextView" >> app/src/main/java/com/hitranslate/ultra/MainActivity.kt
+          echo "class MainActivity : AppCompatActivity() {" >> app/src/main/java/com/hitranslate/ultra/MainActivity.kt
+          echo " override fun onCreate(b: Bundle?) {" >> app/src/main/java/com/hitranslate/ultra/MainActivity.kt
+          echo " super.onCreate(b)" >> app/src/main/java/com/hitranslate/ultra/MainActivity.kt
+          echo " val t = TextView(this)" >> app/src/main/java/com/hitranslate/ultra/MainActivity.kt
+          echo " t.text = \"TR-ES-EN OK\"" >> app/src/main/java/com/hitranslate/ultra/MainActivity.kt
+          echo " setContentView(t)" >> app/src/main/java/com/hitranslate/ultra/MainActivity.kt
+          echo " }" >> app/src/main/java/com/hitranslate/ultra/MainActivity.kt
+          echo "}" >> app/src/main/java/com/hitranslate/ultra/MainActivity.kt
+          gradle wrapper --gradle-version 8.5
       - name: Compilar
-        run: chmod +x gradlew &&./gradlew assembleDebug
+        run: |
+          chmod +x gradlew
+         ./gradlew assembleDebug
       - name: Subir
         uses: actions/upload-artifact@v4
         with:
